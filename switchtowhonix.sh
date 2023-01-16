@@ -2,10 +2,10 @@
 
 # function to display help message
 display_help() {
-    echo "Usage: $0 [add|delete] [--help] [dns]"
-    echo "add: adds the Tor Whonix configuration to the interfaces and resolv.conf files"
-    echo "delete: deletes the Tor Whonix configuration from the interfaces and resolv.conf files and replaces nameserver 10.152.152.10 with 9.9.9.9 or provided dns"
-    echo "dns: use this option to provide dns server to be used instead of 9.9.9.9"
+    echo -e "Usage: $0 [\033[32madd\033[0m|\033[31mdelete\033[0m] [--help] [\033[34mdns\033[0m]"
+    echo -e "\033[32madd\033[0m: adds the Tor Whonix configuration to the interfaces and resolv.conf files"
+    echo -e "\033[31mdelete\033[0m: deletes the Tor Whonix configuration from the interfaces and resolv.conf files and replaces nameserver 10.152.152.10 with 9.9.9.9 or provided dns"
+    echo -e "\033[34mdns\033[0m: use this option to provide dns server to be used instead of 9.9.9.9"
     echo "--help: displays this help message"
 }
 
