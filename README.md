@@ -1,1 +1,1 @@
-# switchtowhonix
+This script allows users to add or delete the Tor Whonix configuration on their Linux system, and to specify a custom DNS server or use the default one. The script includes error handling for cases where the configuration or nameserver already exist, and also includes a help message for user guidance.
