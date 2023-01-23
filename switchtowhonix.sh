@@ -43,7 +43,7 @@ if [ "$1" == "add" ]; then
         echo "Tor Whonix configuration added to interfaces file"
         # Starting Tor Service
         if ! systemctl is-active --quiet tor; then
-            sudo service to start
+            sudo service tor start
         else
             echo "Tor service is already up and running"
         fi
