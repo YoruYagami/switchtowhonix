@@ -36,6 +36,8 @@ if [ "$1" == "add" ]; then
         sudo bash -c 'echo "netmask 255.255.192.0" >> /etc/network/interfaces'
         sudo bash -c 'echo "gateway 10.152.152.10" >> /etc/network/interfaces'
         echo "Tor Whonix configuration added to interfaces file"
+        # Starting Tor Service
+        sudo systemctl start tor
     fi
     if grep -q "nameserver 10.152.152.10" /etc/resolv.conf; then
         echo "Error: nameserver 10.152.152.10 already exists in resolv.conf file"
@@ -54,6 +56,8 @@ elif [ "$1" == "delete" ]; then
     # delete the configuration from the interfaces file
     sudo sed -i '/#Tor Whonix/,+5d' /etc/network/interfaces
     echo "Tor Whonix configuration deleted from interfaces file"
+    #Stopping Tor Service
+    sudo systemctl stop tor
     # replace nameserver 10.152.152.10 with 9.9.9.9 or provided dns in the resolv.conf file
     if [ $# -lt 3 ]; then
     sudo sed -i 's/nameserver 10.152.152.10/nameserver 9.9.9.9/g' /etc/resolv.conf
