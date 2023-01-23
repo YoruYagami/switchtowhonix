@@ -28,6 +28,11 @@ if [ "$1" == "add" ]; then
         echo "Error: Tor Whonix configuration already exists in interfaces file"
         exit 1
     else
+        # check if tor and torbrowser is installed or not
+        if ! dpkg -s tor &> /dev/null; then
+            sudo apt update -y && sudo apt upgrade -y
+            sudo apt install -y tor torbrowser-launcher
+        fi
         # add the configuration to the interfaces file
         sudo bash -c 'echo "#Tor Whonix" >> /etc/network/interfaces'
         sudo bash -c 'echo "auto eth0" >> /etc/network/interfaces'
@@ -37,7 +42,11 @@ if [ "$1" == "add" ]; then
         sudo bash -c 'echo "gateway 10.152.152.10" >> /etc/network/interfaces'
         echo "Tor Whonix configuration added to interfaces file"
         # Starting Tor Service
-        sudo systemctl start tor
+        if ! systemctl is-active --quiet tor; then
+            sudo systemctl start tor
+        else
+            echo "Tor service is already up and running"
+        fi
     fi
     if grep -q "nameserver 10.152.152.10" /etc/resolv.conf; then
         echo "Error: nameserver 10.152.152.10 already exists in resolv.conf file"
@@ -62,12 +71,16 @@ elif [ "$1" == "delete" ]; then
     if [ $# -lt 3 ]; then
     sudo sed -i 's/nameserver 10.152.152.10/nameserver 9.9.9.9/g' /etc/resolv.conf
     echo "nameserver 10.152.152.10 replaced with 9.9.9.9 in resolv.conf file"
-else
+    else
     sudo sed -i "s/nameserver 10.152.152.10/nameserver $3/g" /etc/resolv.conf
     echo "nameserver 10.152.152.10 replaced with $3 in resolv.conf file"
-fi
+    fi
 else
     echo "Error: invalid argument provided"
     display_help
     exit 1
+fi
+
+if [ "$1" == "add" ]; then
+    echo "Please remember to change the network settings of Virtualbox to Internal Network > Whonix"
 fi
