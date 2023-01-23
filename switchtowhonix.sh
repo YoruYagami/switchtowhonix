@@ -43,7 +43,7 @@ if [ "$1" == "add" ]; then
         echo "Tor Whonix configuration added to interfaces file"
         # Starting Tor Service
         if ! systemctl is-active --quiet tor; then
-            sudo service tor start
+            sudo systemctl tor start
         else
             echo "Tor service is already up and running"
         fi
@@ -66,7 +66,7 @@ elif [ "$1" == "delete" ]; then
     sudo sed -i '/#Tor Whonix/,+5d' /etc/network/interfaces
     echo "Tor Whonix configuration deleted from interfaces file"
     #Stopping Tor Service
-    sudo service tor stop
+    sudo systemctl tor stop
     # replace nameserver 10.152.152.10 with 9.9.9.9 or provided dns in the resolv.conf file
     if [ $# -lt 3 ]; then
     sudo sed -i 's/nameserver 10.152.152.10/nameserver 9.9.9.9/g' /etc/resolv.conf
