@@ -1,4 +1,3 @@
-@@ -0,0 +1,69 @@
 #!/bin/bash
 
 # function to display help message
