@@ -9,11 +9,6 @@
 SwitchToWhonix is a bash script that allows you to easily manage your Tor Whonix network configuration on your Linux system.
 The script provides a simple menu to let you add, delete, or view the status of the Tor Whonix configuration in your network interfaces file (/etc/network/interfaces).
 
-## Features
-- Add Tor Whonix configuration
-- Delete Tor Whonix configuration
-- View Tor Whonix configuration status
-
 ## Usage
 ```
 sudo ./switchtowhonix.sh
