@@ -1,31 +1,45 @@
+<h1 align="center">
+  <img src="https://img.shields.io/badge/Maintained%3F-Yes-23a82c">
+  <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/YoruYagami/switchtowhonix">
+  <img src="https://img.shields.io/badge/Developed%20for-kali%20linux-blueviolet">
+</h1>
+
 # SwitchToWhonix
 
-This script allows users to add or delete the Tor Whonix configuration on their Linux system, and to specify a custom DNS server or use the default one. The script includes error handling for cases where the configuration or nameserver already exist, and also includes a help message for user guidance.
+SwitchToWhonix is a bash script that allows you to easily manage your Tor Whonix network configuration on your Linux system.
+The script provides a simple menu to let you add, delete, or view the status of the Tor Whonix configuration in your network interfaces file (/etc/network/interfaces).
 
-## How it works
-When the script is executed, it first defines a function display_help() that outputs the usage instructions and help messages. If the user runs the script without providing any arguments or with the argument --help, the help message is displayed.
-
-The script takes three arguments: add or delete, --help, and a DNS server address. The add option adds the Tor Whonix configuration to the interfaces and resolv.conf files, while the delete option removes the Tor Whonix configuration and replaces the nameserver 10.152.152.10 with 9.9.9.9 or a provided DNS server address in the resolv.conf file.
-
-When the add option is chosen, the script first checks if the Tor Whonix configuration already exists in the interfaces file. If the configuration is not present, the script adds the necessary configuration lines to the interfaces file. It then checks if the nameserver configuration for 10.152.152.10 already exists in the resolv.conf file. If the configuration is not present, the script adds the necessary nameserver configuration line to the resolv.conf file with a default value of 9.9.9.9 or the DNS server address provided as an argument.
-
-When the delete option is chosen, the script first removes the Tor Whonix configuration from the interfaces file. It then replaces the nameserver configuration for 10.152.152.10 with either 9.9.9.9 or the provided DNS server address in the resolv.conf file.
+## Features
+- Add Tor Whonix configuration
+- Delete Tor Whonix configuration
+- View Tor Whonix configuration status
 
 ## Usage
+```
+sudo ./switchtowhonix.sh
+                .__  __         .__     __                .__                  .__        
+  ________  _  _|__|/  |_  ____ |  |___/  |_  ______  _  _|  |__   ____   ____ |__|__  ___
+ /  ___/\ \/ \/ /  \   __\/ ___\|  |  \   __\/  _ \ \/ \/ /  |  \ /  _ \ /    \|  \  \/  /
+ \___ \  \     /|  ||  | \  \___|   Y  \  | (  <_> )     /|   Y  (  <_> )   |  \  |>    < 
+/____  >  \/\_/ |__||__|  \___  >___|  /__|  \____/ \/\_/ |___|  /\____/|___|  /__/__/\_ \
+     \/                       \/     \/                        \/            \/         \/
+                                                                    By YoruYagami
 
-1. Clone the repo
-   ```sh
-   git clone https://github.com/YoruYagami/switchtowhonix.git
-   ```
-2. Go to the project directory
-   ```sh
-   cd switchtowhonix
-   ```
-3. Change Permission
-   ```sh
-   chmod +x switchtowhonix.sh
-   ```
-4. Execute
-   ```sh
-   ./switchtowhonix.sh <argument>
-   ```
+Please select an option:
+
+1. Add Tor Whonix configuration
+2. Delete Tor Whonix configuration
+3. View Tor Whonix status
+4. Exit
+
+Enter your choice:
+
+```
+
+## Installation
+```bash
+  git clone https://github.com/YoruYagami/switchtowhonix.git
+  cd switchtowhonix
+  chmod +x ./switchtowhonix.sh
+  sudo ./switchtowhonix.sh
+```
