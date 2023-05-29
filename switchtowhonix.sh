@@ -21,12 +21,13 @@ display_menu() {
                                                                     By YoruYagami
 EOF
     echo ""
-    echo "Please select an option:"
+    echo -e "Please select an option:"
     echo ""
-    echo "1. Add Tor Whonix configuration"
-    echo "2. Delete Tor Whonix configuration"
-    echo "3. View Tor Whonix status"
-    echo "4. Exit"
+    echo -e "1. ${GREEN}Add${NC} Tor Whonix configuration"
+    echo -e "2. ${RED}Delete${NC} Tor Whonix configuration"
+    echo -e "3. ${BLUE}View${NC} Tor Whonix status"
+    echo ""
+    echo -e "4. Exit"
 }
 
 # Function to check if Tor Whonix configuration exists
