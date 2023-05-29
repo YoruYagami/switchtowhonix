@@ -5,7 +5,39 @@ GREEN='\e[1;32m'
 BLUE='\e[1;34m'
 CYAN="\e[0;36m"
 YELLOW="\e[0;33m"
+PURPLE="\e[1;35m"
 NC='\e[0m'
+
+# Check if the script is executed with sudo
+if [ $(id -u) -ne 0 ]; then
+    echo "${RED}This script must be run as root. Please run with sudo.${NC}"
+    exit 1
+fi
+
+# Check if switchtowhonix.sh is present in /usr/local/bin
+check_switchtowhonix() {
+    if [ -f "/usr/local/bin/switchtowhonix.sh" ]; then
+        return 0 # File exists
+    else
+        return 1 # File does not exist
+    fi
+}
+
+# Function to add switchtowhonix.sh to /usr/local/bin
+add_switchtowhonix() {
+    echo "The script 'switchtowhonix.sh' is not present in /usr/local/bin."
+    echo "Do you want to add it to /usr/local/bin? (Y/N)"
+
+    read -r choice
+    if [[ $choice =~ ^[Yy]$ ]]; then
+        sudo cp switchtowhonix.sh /usr/local/bin/switchtowhonix
+        sudo chmod +x /usr/local/bin/switchtowhonix
+        echo -e "${GREEN}[+]${NC} 'switchtowhonix' added to /usr/local/bin"
+    else
+        echo "${CYAN}[-]${NC}Skipping the addition of 'switchtowhonix.sh'"
+    fi
+    sleep 2
+}
 
 # Function to display the menu
 display_menu() {
@@ -20,14 +52,18 @@ display_menu() {
      \/                       \/     \/                        \/            \/         \/
                                                                     By YoruYagami
 EOF
+    echo -e ""
+    echo -e "\n Select an option from menu:"
     echo ""
-    echo -e "Please select an option:"
+    echo -e "\nKey      Menu Option:"
+    echo -e "---      -------------------------"
     echo ""
-    echo -e "1. ${GREEN}Add${NC} Tor Whonix configuration"
-    echo -e "2. ${RED}Delete${NC} Tor Whonix configuration"
-    echo -e "3. ${BLUE}View${NC} Tor Whonix status"
+    echo -e " 1    -  ${GREEN}Add${NC} Tor Whonix configuration"
+    echo -e " 2    -  ${RED}Delete${NC} Tor Whonix configuration"
+    echo -e " 3    -  ${BLUE}View${NC} Tor Whonix status"
     echo ""
-    echo -e "4. Exit"
+    echo -e " 4    -  ${CYAN}Check${NC} if Tor service is up and running and start if not"
+    echo -e " 5    -  ${PURPLE}Install${NC} Tor and Tor Browser"
 }
 
 # Function to check if Tor Whonix configuration exists
@@ -87,7 +123,73 @@ view_status() {
     sleep 2
 }
 
+# Function to check if Tor service is running and start if not
+check_and_start_tor_service() {
+    if systemctl is-active --quiet tor; then
+        echo -e "${GREEN}[+]${NC} Tor service is running"
+
+        echo "Do you want to disable the Tor service? (Y/N)"
+        read -r choice
+        if [[ $choice =~ ^[Yy]$ ]]; then
+            systemctl stop tor
+            systemctl disable tor
+            echo -e "${GREEN}[+]${NC} Tor service disabled"
+        else
+            echo "${CYAN}[-]${NC} Skipping the disabling of Tor service"
+        fi
+    else
+        echo -e "${RED}[-]${NC} Tor service is not running"
+
+        if ! command -v tor &> /dev/null; then
+            echo "The Tor service is not installed. Do you want to install it? (Y/N)"
+            read -r choice
+            if [[ $choice =~ ^[Yy]$ ]]; then
+                # Check if system update is required
+                echo "Do you want to update the system before installing Tor? (Y/N)"
+                read -r update_choice
+                if [[ $update_choice =~ ^[Yy]$ ]]; then
+                    apt-get update
+                    apt-get upgrade -y
+                fi
+
+                # Install Tor
+                apt-get install -y tor torbrowser-launcher
+                systemctl start tor
+                echo -e "${GREEN}[+]${NC} Tor service installed and started"
+            else
+                echo "${CYAN}[-]${NC} Skipping the installation of Tor service"
+            fi
+        else
+            echo "The Tor service is already installed. Do you want to start it? (Y/N)"
+            read -r choice
+            if [[ $choice =~ ^[Yy]$ ]]; then
+                systemctl start tor
+                echo -e "${GREEN}[+]${NC} Tor service started"
+            else
+                echo "${CYAN}[-]${NC} Skipping the start of Tor service"
+            fi
+        fi
+    fi
+
+    sleep 2
+}
+
+# Function to install Tor and Tor Browser
+install_tor_and_tor_browser() {
+    if ! command -v tor &> /dev/null || ! command -v torbrowser-launcher &> /dev/null; then
+        echo -e "${BLUE}[*]${NC} Installing Tor and Tor Browser..."
+        apt-get update
+        apt-get install -y tor torbrowser-launcher
+        echo -e "${GREEN}[+]${NC} Tor and Tor Browser installed successfully"
+    else
+        echo -e "${YELLOW}[!]${NC} Tor and Tor Browser are already installed"
+    fi
+
+    sleep 2
+}
+
 # Main script
+check_switchtowhonix
 while true; do
     display_menu
 
@@ -106,9 +208,10 @@ while true; do
             view_status
             ;;
         4)
-            echo "Exiting..."
-            sleep 1
-            exit 0
+            check_and_start_tor_service
+            ;;
+        5)
+            install_tor_and_tor_browser
             ;;
         *)
             echo "Invalid choice. Please try again."
