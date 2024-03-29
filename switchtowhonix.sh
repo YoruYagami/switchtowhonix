@@ -115,12 +115,17 @@ delete_configuration() {
 # Function to view Tor Whonix status
 view_status() {
     if check_configuration; then
-        echo -e "${GREEN}[+]${NC} Tor Whonix configuration is enabled"
+        echo -e "\n${GREEN}[+] Tor Whonix configuration is enabled${NC}"
     else
-        echo -e "${RED}[-]${NC} Tor Whonix configuration is disabled"
+        echo -e "\n${RED}[-] Tor Whonix configuration is disabled${NC}"
     fi
 
-    sleep 2
+    echo -e "\n${YELLOW}/etc/network/interfaces:${NC}"
+    echo ""
+    echo "----------------------------------------"
+    cat /etc/network/interfaces
+    echo "----------------------------------------"
+    sleep 4
 }
 
 # Function to check if Tor service is running and start if not
